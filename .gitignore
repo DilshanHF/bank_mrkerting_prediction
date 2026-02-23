@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Data
+data/
+*.csv
+*.zip
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual env
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Figures (regenerated from notebook)
+# figures/

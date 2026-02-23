@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result — Bank Marketing</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 640px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Prediction result */
+        .result-box {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-yes {
+            background: var(--success-bg);
+            border: 2px solid var(--success);
+        }
+
+        .result-no {
+            background: var(--danger-bg);
+            border: 2px solid var(--danger);
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .result-yes .result-value {
+            color: var(--success);
+        }
+
+        .result-no .result-value {
+            color: var(--danger);
+        }
+
+        .confidence {
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Input summary */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .summary-table td {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .summary-table td:first-child {
+            font-weight: 600;
+            color: var(--text-secondary);
+            width: 40%;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #1557b0;
+        }
+
+        .prob-bar {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 28px;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .prob-no {
+            background: var(--danger);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .prob-yes {
+            background: var(--success);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🏦 Prediction Result</h1>
+        </header>
+
+        <!-- Prediction Result -->
+        <div class="result-box {{ 'result-yes' if result.prediction == 'YES' else 'result-no' }}">
+            <div class="result-label">Client subscribed a term deposit?</div>
+            <div class="result-value">{{ result.prediction }}</div>
+            <div class="confidence">Confidence: {{ result.confidence }}</div>
+
+            <div class="prob-bar">
+                <div class="prob-no" style="width: {{ result.prob_no }};">No {{ result.prob_no }}</div>
+                <div class="prob-yes" style="width: {{ result.prob_yes }};">Yes {{ result.prob_yes }}</div>
+            </div>
+        </div>
+
+        <!-- Input Summary -->
+        <div class="card">
+            <h2>📋 Input Summary</h2>
+            <table class="summary-table">
+                <tr>
+                    <td>Age</td>
+                    <td>{{ input_data.age }}</td>
+                </tr>
+                <tr>
+                    <td>Job</td>
+                    <td>{{ input_data.job }}</td>
+                </tr>
+                <tr>
+                    <td>Marital Status</td>
+                    <td>{{ input_data.marital }}</td>
+                </tr>
+                <tr>
+                    <td>Education</td>
+                    <td>{{ input_data.education }}</td>
+                </tr>
+                <tr>
+                    <td>Credit Default</td>
+                    <td>{{ input_data.default }}</td>
+                </tr>
+                <tr>
+                    <td>Housing Loan</td>
+                    <td>{{ input_data.housing }}</td>
+                </tr>
+                <tr>
+                    <td>Personal Loan</td>
+                    <td>{{ input_data.loan }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <a href="/" class="btn" id="newPredictionBtn">← Make Another Prediction</a>
+
+        <footer>
+            <p>Bank Marketing Prediction POC — ML + Cloud Coursework</p>
+        </footer>
+    </div>
+</body>
+
+</html>

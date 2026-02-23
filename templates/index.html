@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Marketing Prediction — Term Deposit Subscription</title>
+    <meta name="description" content="Predict whether a bank client will subscribe to a term deposit based on demographic information.">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --error: #ef4444;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 640px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            color: var(--text);
+        }
+
+        label span.hint {
+            font-weight: 400;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: #fafbfc;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.85rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 0.5rem;
+        }
+
+        .btn:hover { background: var(--primary-dark); }
+        .btn:active { transform: scale(0.98); }
+
+        .error-msg {
+            background: #fef2f2;
+            color: var(--error);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            border: 1px solid #fecaca;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏦 Bank Marketing Prediction</h1>
+            <p>Enter client details to predict term deposit subscription</p>
+        </header>
+
+        {% if error %}
+        <div class="error-msg">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form action="/predict" method="POST" class="card" id="predictionForm">
+            <div class="row">
+                <div class="form-group">
+                    <label for="age">Age <span class="hint">(numeric)</span></label>
+                    <input type="number" id="age" name="age" min="17" max="100" value="35" required>
+                </div>
+                <div class="form-group">
+                    <label for="job">Job</label>
+                    <select id="job" name="job" required>
+                        {% for val in categorical_values['job'] %}
+                        <option value="{{ val }}">{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="marital">Marital Status</label>
+                    <select id="marital" name="marital" required>
+                        {% for val in categorical_values['marital'] %}
+                        <option value="{{ val }}">{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="education">Education</label>
+                    <select id="education" name="education" required>
+                        {% for val in categorical_values['education'] %}
+                        <option value="{{ val }}">{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="default">Credit Default</label>
+                    <select id="default" name="default" required>
+                        {% for val in categorical_values['default'] %}
+                        <option value="{{ val }}">{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="housing">Housing Loan</label>
+                    <select id="housing" name="housing" required>
+                        {% for val in categorical_values['housing'] %}
+                        <option value="{{ val }}">{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="loan">Personal Loan</label>
+                <select id="loan" name="loan" required>
+                    {% for val in categorical_values['loan'] %}
+                    <option value="{{ val }}">{{ val }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn" id="predictBtn">🔍 Predict Subscription</button>
+        </form>
+
+        <footer>
+            <p>Bank Marketing Prediction POC — ML + Cloud Coursework</p>
+            <p>Powered by Logistic Regression · scikit-learn · Flask</p>
+        </footer>
+    </div>
+</body>
+</html>

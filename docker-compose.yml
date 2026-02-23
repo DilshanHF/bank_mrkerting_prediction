@@ -1,0 +1,21 @@
+# ============================================================
+# docker-compose.yml — Local development / testing
+# ============================================================
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: bank-marketing-prediction
+    ports:
+      - "5000:5000"
+    environment:
+      - MODEL_PATH=model/lr_deployment_pipeline.joblib
+      - FEATURE_INFO_PATH=model/feature_info.json
+      - PORT=5000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
