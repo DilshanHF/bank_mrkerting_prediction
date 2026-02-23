@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🏦 Bank Marketing Prediction
 
 **ML + Cloud Coursework — Predicting Term Deposit Subscription**
@@ -79,3 +80,6 @@ See the [Deployment Guide](docs/REPORT.md#task-d--deployment) in the report.
 5. `default` — Has credit in default? (yes/no/unknown)
 6. `housing` — Has housing loan? (yes/no/unknown)
 7. `loan` — Has personal loan? (yes/no/unknown)
+=======
+# bank_markerting_prediction
+>>>>>>> 4436e3c90d30c3679333a4e2c82a81667faacca3
