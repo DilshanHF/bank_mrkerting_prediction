@@ -1,0 +1,12 @@
+{
+  "features": [
+    "age",
+    "job",
+    "marital",
+    "education",
+    "default",
+    "housing",
+    "loan"
+  ],
+  "categorical_values": {}
+}

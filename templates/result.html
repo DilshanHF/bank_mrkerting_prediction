@@ -199,9 +199,13 @@
             <div class="confidence">Confidence: {{ result.confidence }}</div>
 
             <div class="prob-bar">
-                <div class="prob-no" style="width: {{ result.prob_no }};">No {{ result.prob_no }}</div>
-                <div class="prob-yes" style="width: {{ result.prob_yes }};">Yes {{ result.prob_yes }}</div>
+                <div class="prob-no" id="prob-no-bar">No {{ result.prob_no }}</div>
+                <div class="prob-yes" id="prob-yes-bar">Yes {{ result.prob_yes }}</div>
             </div>
+            <script>
+                document.getElementById('prob-no-bar').style.width = "{{ result.prob_no }}";
+                document.getElementById('prob-yes-bar').style.width = "{{ result.prob_yes }}";
+            </script>
         </div>
 
         <!-- Input Summary -->
