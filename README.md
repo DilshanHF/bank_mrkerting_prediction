@@ -1,1 +1,1 @@
-# bank_mrkerting_prediction
+# bank_markerting_prediction
